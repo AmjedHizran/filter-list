@@ -35,9 +35,6 @@ export function App() {
     );
     setFilteredRobotsList(filteredList);
     setRobotsList(filteredList);
-    if(filterText.length == 0){
-      setRobotsList(robotsList);
-    }
   };
 
   return (
