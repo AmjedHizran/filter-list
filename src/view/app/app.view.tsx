@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { List } from "../list/list.view";
 import { Robot } from "../../types";
 import styles from './app.module.scss';
+import { Filter } from "../filter/filter.view";
 
 export function App() {
   const [robotsList, setRobotsList] = useState<Robot[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
+  const [filteredRobotsList, setFilteredRobotsList] = useState<Robot[]>([]);
 
   useEffect(() => {
 
@@ -27,9 +29,23 @@ export function App() {
     getData().catch(console.log);
   }, []);
 
+  const handleFilterChange = (filterText: string) => {
+    const filteredList = robotsList.filter((robot) =>
+      robot.first_name.toLowerCase().includes(filterText.toLowerCase())
+    );
+    setFilteredRobotsList(filteredList);
+    setRobotsList(filteredList);
+    if(filterText.length == 0){
+      setRobotsList(robotsList);
+    }
+  };
+
   return (
     <div className={styles.app}>
       <div className={styles.header}>
+        <Filter
+          onFilterChange={handleFilterChange}
+          filteredCount={filteredRobotsList.length === 0 ? robotsList.length : filteredRobotsList.length}/>
         <h1 className={`${styles.headline} ${styles["white-text"]}`}>Show me the list!</h1>
       </div>
       {errorMsg ? (
